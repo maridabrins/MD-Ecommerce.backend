@@ -105,6 +105,15 @@ public class Produto {
 	public List<Pedido> getPedido(){
 		return itens.stream().map(x ->x.getPedido()).toList();
 	}
+
+	public Set<Categoria> getCategorias() {
+		return categorias;
+	}
+
+	public void setCategorias(Set<Categoria> categorias) {
+		this.categorias = categorias;
+	}
+	
 	
 
 }

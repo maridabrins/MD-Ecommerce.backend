@@ -7,8 +7,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.revisao.ecommerce.dto.CategoriaDTO;
 import com.revisao.ecommerce.dto.ProdutoDTO;
+import com.revisao.ecommerce.entities.Categoria;
 import com.revisao.ecommerce.entities.Produto;
+import com.revisao.ecommerce.repositories.CategoriaRepository;
 import com.revisao.ecommerce.repositories.ProdutoRepository;
 
 @Service
@@ -16,6 +19,9 @@ public class ProdutoService {
 	
 	@Autowired
 	ProdutoRepository repository;
+	
+	@Autowired
+	CategoriaRepository cRepository;
 	
 	//estamos definindo uma lista de produtos
 	public List<ProdutoDTO> findAll(){
@@ -26,6 +32,21 @@ public class ProdutoService {
 	public Page<ProdutoDTO> findPagina(Pageable pagina){
 		Page<Produto> busca = repository.findAll(pagina);
 		return busca.map(x-> new ProdutoDTO(x));
+	}
+	
+	public ProdutoDTO insert(ProdutoDTO dto) {
+		Produto entity = new Produto();
+		entity.setNome(dto.getNome());
+		entity.setDescricao(dto.getDescricao());
+		entity.setPreco(dto.getPreco());
+		entity.setImgUrl(dto.getImgUrl());
+		
+		for(CategoriaDTO cDTO : dto.getCategorias()) {
+			Categoria cat = cRepository.getReferenceById(cDTO.getId());
+			entity.getCategorias().add(cat);
+		}
+		entity = repository.save(entity);
+		return new ProdutoDTO(entity);
 	}
 
 }
