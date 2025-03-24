@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -48,6 +50,14 @@ public class Pedido {
 		this.status = status;
 	}
 
+	public Usuario getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Usuario cliente) {
+		this.cliente = cliente;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -79,6 +89,8 @@ public class Pedido {
 	public List<Produto> getPedido(){
 		return itens.stream().map(x ->x.getProduto()).toList();
 	}
+
+	
 	
 	
 

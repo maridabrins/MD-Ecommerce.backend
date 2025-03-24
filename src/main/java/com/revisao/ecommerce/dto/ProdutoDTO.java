@@ -17,7 +17,6 @@ import com.revisao.ecommerce.entities.Produto;
 	private List<CategoriaDTO> categorias = new ArrayList<>();
 	
 
-
   public ProdutoDTO() {
 	 
  }
@@ -37,7 +36,7 @@ import com.revisao.ecommerce.entities.Produto;
 		preco = entity.getPreco();
 		imgUrl = entity.getImgUrl();
 		for(Categoria cat : entity.getCategorias()) {
-			categorias.add(new CategoriaDTO());
+			categorias.add(new CategoriaDTO(cat));
 		}
  	
  }
