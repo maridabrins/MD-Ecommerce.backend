@@ -27,6 +27,19 @@ public class UsuarioController {
 			dto = usuarioService.salvarUsuario(dto);
 			return ResponseEntity.ok(dto);
 		}
+		
+		@PostMapping (value = "/login")
+		public ResponseEntity<?> logar(@RequestBody UsuarioDTO dto){//metodo para mostrar se o usuario existe ou não
+			
+			boolean teste = usuarioService.login(dto);
+			
+			if(teste) {
+				//se a resposta do matches(service) for true
+				return ResponseEntity.ok("Sucesso!");
+			}
+			//se a resposta do matches for false
+			return ResponseEntity.status(401).body("Senha ou login incorretos!");
+		}
 	
 	
 }
