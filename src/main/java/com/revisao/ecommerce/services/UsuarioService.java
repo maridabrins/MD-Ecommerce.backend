@@ -29,4 +29,26 @@ public class UsuarioService {
 		usuario = usuarioRepository.save(usuario);
 		return new UsuarioDTO(usuario);
 	}
+	
+	public boolean login(UsuarioDTO dto) { //confirmar se é true ou false
+		//vendo se o email existe
+		Usuario usuario = usuarioRepository.findByEmail(dto.getEmail()); //procurando o usuario por email
+		
+		if(usuario == null ) { //consultando se o usuario existe
+			return false;
+		}
+		
+
+	    // comparar nome ignorando letras maius oou min
+	    if (!usuario.getNome().equalsIgnoreCase(dto.getNome())) {
+	        return false;
+	    }
+
+	    // comparar telefone
+	    if (!usuario.getTelefone().equals(dto.getTelefone())) {
+	        return false;
+	    }
+		//vendo se a senha existe/esta correta
+		return  config.matches(dto.getSenha(), usuario	.getSenha()); //comparando se as senhas batem
+	}
 }
