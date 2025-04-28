@@ -1,6 +1,7 @@
 package com.revisao.ecommerce.services;
 
 import java.time.Instant;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,17 @@ public class PedidoService {
 	@Autowired
 	UsuarioRepository usuarioRepository;
 	
+	@Transactional
+	public List<PedidoDTO> findAll(){
+		List<Pedido> lista = repository.findAll();
+		 return lista.stream().map(pedido -> new PedidoDTO(pedido)).toList();
+		
+	}
+	
+	public PedidoDTO findById(Long id) {
+		Pedido entity = repository.findById(id).get();
+		return new PedidoDTO(entity);
+	}
 	
 	@Transactional //falar p banco que vc vai mandar varias 
 	public PedidoDTO insert(PedidoDTO dto) {
@@ -41,4 +53,25 @@ public class PedidoService {
 			
 			return new PedidoDTO(entity);
 		}
+	
+	@Transactional
+	public PedidoDTO update(Long id, PedidoDTO dto) {
+		Pedido entity = repository.getReferenceById(id);
+		
+		entity.setId(dto.getId());
+		entity.setMomento(dto.getMomento());
+		entity.setStatus(dto.getStatus());
+		
+		Usuario user = usuarioRepository.getReferenceById(dto.getCliente_id());
+				entity.setCliente(user);
+		
+		entity = repository.save(entity);
+		return new PedidoDTO(entity);
+		
+	}
+	
+	@Transactional
+	public void delete(Long id) {
+		repository.deleteById(id);
+	}
 }

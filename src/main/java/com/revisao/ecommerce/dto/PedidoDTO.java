@@ -24,10 +24,12 @@ public class PedidoDTO {
 	}
 	
 	public PedidoDTO(Pedido entity) {
-		id = entity.getId();
-		momento = entity.getMomento();
-		status = entity.getStatus();
-		cliente_id = entity.getCliente().getId();	//associando o id do cliente com o id do pedido
+	    id = entity.getId();
+	    momento = entity.getMomento();
+	    status = entity.getStatus();
+	    if (entity.getCliente() != null) {
+	        cliente_id = entity.getCliente().getId(); //associando os id
+	    }
 	}
 
 	public Long getId() {
