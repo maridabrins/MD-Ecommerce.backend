@@ -59,6 +59,28 @@ public class ProdutoService {
 		return new ProdutoDTO(entity);
 	}
 	
+	@Transactional
+	public ProdutoDTO update(Long id, ProdutoDTO dto) {
+		
+			Produto entity = repository.getReferenceById(id);
+			entity.setNome(dto.getNome());
+			entity.setDescricao(dto.getDescricao());
+			entity.setPreco(dto.getPreco());
+			entity.setImgUrl(dto.getImgUrl());
+			
+			entity.getCategorias().clear();
+			for (CategoriaDTO cDTO : dto.getCategorias()){
+				Categoria cat = cRepository.getReferenceById(cDTO.getId());
+						entity.getCategorias().add(cat);
+			}
+			
+			entity = repository.save(entity);
+			return new ProdutoDTO(entity);
+		
+			
+		}
+	}
+	
 	
 
-}
+
