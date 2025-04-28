@@ -36,6 +36,13 @@ public class ProdutoService {
 		return busca.map(x-> new ProdutoDTO(x));
 	}
 	
+	
+	@Transactional //garantir eficacia do método
+	public ProdutoDTO findById(Long id){
+		Produto entity = repository.findById(id).get();
+		return  new ProdutoDTO(entity);
+	}
+	
 	@Transactional
 	public ProdutoDTO insert(ProdutoDTO dto) {
 		Produto entity = new Produto();
@@ -51,5 +58,7 @@ public class ProdutoService {
 		entity = repository.save(entity);
 		return new ProdutoDTO(entity);
 	}
+	
+	
 
 }
