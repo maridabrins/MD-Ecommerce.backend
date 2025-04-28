@@ -79,6 +79,11 @@ public class ProdutoService {
 		
 			
 		}
+	
+	@Transactional
+	public void delete(Long id) {
+		repository.deleteById(id);
+	}
 	}
 	
 	
