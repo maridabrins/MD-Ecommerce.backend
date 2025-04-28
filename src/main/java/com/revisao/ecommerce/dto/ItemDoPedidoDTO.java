@@ -4,6 +4,7 @@ import com.revisao.ecommerce.entities.ItemDoPedido;
 
 public class ItemDoPedidoDTO {
 	
+	private Long produtoId;
 	private Integer quantidade;
 	private Double preco;
 	
@@ -13,10 +14,26 @@ public class ItemDoPedidoDTO {
 	}
 	
 	
-	public ItemDoPedidoDTO(Integer quantidade, Double preco) {
-		super();
-		this.quantidade = quantidade;
-		this.preco = preco;
+	public ItemDoPedidoDTO(Long produtoId, Integer quantidade, Double preco) {
+	    this.produtoId = produtoId;
+	    this.quantidade = quantidade;
+	    this.preco = preco;
+	}
+	
+	public ItemDoPedidoDTO(ItemDoPedido entity) {
+	    this.produtoId = entity.getProduto().getId(); 
+	    this.quantidade = entity.getQuantidade();
+	    this.preco = entity.getPreco();
+	}
+
+
+	public Long getProdutoId() {
+		return produtoId;
+	}
+
+
+	public void setProdutoId(Long produtoId) {
+		this.produtoId = produtoId;
 	}
 
 
@@ -38,8 +55,8 @@ public class ItemDoPedidoDTO {
 	public void setPreco(Double preco) {
 		this.preco = preco;
 	}
-	
-	
+
+
 	
 
 }
