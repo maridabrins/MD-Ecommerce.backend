@@ -12,6 +12,7 @@ import com.revisao.ecommerce.dto.ProdutoDTO;
 import com.revisao.ecommerce.entities.Categoria;
 import com.revisao.ecommerce.entities.Produto;
 import com.revisao.ecommerce.repositories.CategoriaRepository;
+
 import com.revisao.ecommerce.repositories.ProdutoRepository;
 
 import jakarta.transaction.Transactional;
@@ -24,6 +25,8 @@ public class ProdutoService {
 	
 	@Autowired
 	CategoriaRepository cRepository;
+	
+	
 	
 	//estamos definindo uma lista de produtos
 	public List<ProdutoDTO> findAll(){

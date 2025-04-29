@@ -6,11 +6,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.revisao.ecommerce.dto.ItemDoPedidoDTO;
 import com.revisao.ecommerce.dto.PedidoDTO;
+import com.revisao.ecommerce.entities.ItemDoPedido;
 import com.revisao.ecommerce.entities.Pedido;
+import com.revisao.ecommerce.entities.Produto;
 import com.revisao.ecommerce.entities.StatusDoPedido;
 import com.revisao.ecommerce.entities.Usuario;
+import com.revisao.ecommerce.repositories.ItemDoPedidoRepository;
 import com.revisao.ecommerce.repositories.PedidoRepository;
+import com.revisao.ecommerce.repositories.ProdutoRepository;
 import com.revisao.ecommerce.repositories.UsuarioRepository;
 
 import jakarta.transaction.Transactional;
@@ -25,6 +30,12 @@ public class PedidoService {
 	
 	@Autowired
 	UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	ItemDoPedidoRepository itemRepository;
+	
+	@Autowired
+	ProdutoRepository produtoRepository;
 	
 	@Transactional
 	public List<PedidoDTO> findAll(){
@@ -46,11 +57,14 @@ public class PedidoService {
 			entity.setStatus(StatusDoPedido.AGUARDANDO_PAGAMENTO);
 			
 			Usuario user = usuarioRepository.getReferenceById(dto.getCliente_id());
-			
 			entity.setCliente(user);
 			
+			for (ItemDoPedidoDTO itemDTO : dto.getItens()) {
+			    Produto produto = produtoRepository.getReferenceById(itemDTO.getProdutoId()); // você precisa deste repository
+			    ItemDoPedido item = new ItemDoPedido(entity, produto, itemDTO.getQuantidade(), itemDTO.getPreco());
+			    entity.getItens().add(item);
+			}
 			entity = repository.save(entity);
-			
 			return new PedidoDTO(entity);
 		}
 	
@@ -63,7 +77,7 @@ public class PedidoService {
 		entity.setStatus(dto.getStatus());
 		
 		Usuario user = usuarioRepository.getReferenceById(dto.getCliente_id());
-				entity.setCliente(user);
+		entity.setCliente(user);
 		
 		entity = repository.save(entity);
 		return new PedidoDTO(entity);
