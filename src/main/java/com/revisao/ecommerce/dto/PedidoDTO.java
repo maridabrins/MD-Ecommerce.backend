@@ -3,8 +3,8 @@ package com.revisao.ecommerce.dto;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import com.revisao.ecommerce.entities.ItemDoPedido;
 import com.revisao.ecommerce.entities.Pedido;
 import com.revisao.ecommerce.entities.StatusDoPedido;
 
@@ -14,7 +14,8 @@ public class PedidoDTO {
 	private Instant momento;
 	private StatusDoPedido status;
 	private Long cliente_id; //pq usou o LOng ao inves de importar o DTO?
-	private List<ItemDoPedidoDTO> itens = new ArrayList<>();
+	
+	private List<ItemDoPedidoDTO> itens = new ArrayList<>(); 
 	
 	public PedidoDTO() {
 		
@@ -31,10 +32,11 @@ public class PedidoDTO {
 	    this.id = entity.getId();
 	    this.momento = entity.getMomento();
 	    this.status = entity.getStatus();
-	    if (entity.getCliente() != null) {
-	        this.cliente_id = entity.getCliente().getId();
+	    this.cliente_id = entity.getCliente().getId();
+	    for (ItemDoPedido item : entity.getItens()) {
+	    	ItemDoPedidoDTO itemDto = new ItemDoPedidoDTO(item);
+	    	itens.add(itemDto);
 	    }
-	    this.itens = entity.getItens().stream().map(item -> new ItemDoPedidoDTO(item)).collect(Collectors.toList());
 	}
 	
 
