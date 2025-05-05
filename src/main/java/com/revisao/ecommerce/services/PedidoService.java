@@ -52,21 +52,23 @@ public class PedidoService {
 	@Transactional //falar p banco que vc vai mandar varias 
 	public PedidoDTO insert(PedidoDTO dto) {
 			Pedido entity = new Pedido();
-			entity.setId(dto.getId());
 			entity.setMomento(Instant.now());
 			entity.setStatus(StatusDoPedido.AGUARDANDO_PAGAMENTO);
 			
 			Usuario user = usuarioRepository.getReferenceById(dto.getCliente_id());
 			entity.setCliente(user);
 			
-			for (ItemDoPedidoDTO itemDTO : dto.getItens()) {
-			    Produto produto = produtoRepository.getReferenceById(itemDTO.getProdutoId()); // você precisa deste repository
-			    ItemDoPedido item = new ItemDoPedido(entity, produto, itemDTO.getQuantidade(), itemDTO.getPreco());
-			    entity.getItens().add(item);
+			for(ItemDoPedidoDTO itemDto : dto.getItens()) {
+				Produto produto = produtoRepository.getReferenceById(itemDto.getProdutoId());
+				ItemDoPedido item = new ItemDoPedido(entity,produto, itemDto.getQuantidade(), itemDto.getPreco());
+				entity.getItens().add(item);
 			}
 			entity = repository.save(entity);
+			itemRepository.saveAll(entity.getItens());
 			return new PedidoDTO(entity);
 		}
+	
+	
 	
 	@Transactional
 	public PedidoDTO update(Long id, PedidoDTO dto) {
@@ -76,8 +78,14 @@ public class PedidoService {
 		entity.setMomento(dto.getMomento());
 		entity.setStatus(dto.getStatus());
 		
-		Usuario user = usuarioRepository.getReferenceById(dto.getCliente_id());
-		entity.setCliente(user);
+		entity.getItens().clear();
+		
+		for(ItemDoPedidoDTO itemDTO : dto.getItens()) {
+			Produto produto = produtoRepository.getReferenceById(itemDTO.getProdutoId());
+	        ItemDoPedido novoItem = new ItemDoPedido(entity, produto, itemDTO.getQuantidade(), itemDTO.getPreco());
+	        itemRepository.save(novoItem);
+		}
+		
 		
 		entity = repository.save(entity);
 		return new PedidoDTO(entity);
