@@ -72,26 +72,26 @@ public class PedidoService {
 	
 	@Transactional
 	public PedidoDTO update(Long id, PedidoDTO dto) {
-		Pedido entity = repository.getReferenceById(id);
-		
-		entity.setId(dto.getId());
-		entity.setMomento(dto.getMomento());
-		entity.setStatus(dto.getStatus());
-		
-		
-		entity.getItens().clear();
-		
-		for(ItemDoPedidoDTO itemDTO : dto.getItens()) {
-			Produto produto = produtoRepository.getReferenceById(itemDTO.getProdutoId());
+	    Pedido entity = repository.getReferenceById(id);
+
+	    entity.setMomento(dto.getMomento());
+	    entity.setStatus(dto.getStatus());
+
+	    // Remove os itens antigos
+	    itemRepository.deleteAll(entity.getItens());
+	    entity.getItens().clear();
+
+	    // Adiciona os novos itens
+	    for (ItemDoPedidoDTO itemDTO : dto.getItens()) {
+	        Produto produto = produtoRepository.getReferenceById(itemDTO.getProdutoId());
 	        ItemDoPedido novoItem = new ItemDoPedido(entity, produto, itemDTO.getQuantidade(), itemDTO.getPreco());
 	        entity.getItens().add(novoItem);
-	      }
-		
-		
-		entity = repository.save(entity);
-		itemRepository.saveAll(entity.getItens());
-		return new PedidoDTO(entity);
-		
+	    }
+
+	    entity = repository.save(entity);
+	    itemRepository.saveAll(entity.getItens());
+
+	    return new PedidoDTO(entity);
 	}
 	
 	@Transactional
