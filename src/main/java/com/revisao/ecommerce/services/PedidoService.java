@@ -78,22 +78,27 @@ public class PedidoService {
 		entity.setMomento(dto.getMomento());
 		entity.setStatus(dto.getStatus());
 		
+		
 		entity.getItens().clear();
 		
 		for(ItemDoPedidoDTO itemDTO : dto.getItens()) {
 			Produto produto = produtoRepository.getReferenceById(itemDTO.getProdutoId());
 	        ItemDoPedido novoItem = new ItemDoPedido(entity, produto, itemDTO.getQuantidade(), itemDTO.getPreco());
-	        itemRepository.save(novoItem);
-		}
+	        entity.getItens().add(novoItem);
+	      }
 		
 		
 		entity = repository.save(entity);
+		itemRepository.saveAll(entity.getItens());
 		return new PedidoDTO(entity);
 		
 	}
 	
 	@Transactional
 	public void delete(Long id) {
+		Pedido entity = repository.findById(id).orElseThrow();
+		//precisa deletar a lista de pedidos
+		itemRepository.deleteAll(entity.getItens());
 		repository.deleteById(id);
 	}
 }
