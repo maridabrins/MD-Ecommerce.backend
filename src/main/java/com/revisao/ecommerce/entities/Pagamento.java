@@ -47,6 +47,16 @@ public class Pagamento {
 	public void setMomento(Instant momento) {
 		this.momento = momento;
 	}
+
+	public Pedido getPedido() {
+		return pedido;
+	}
+
+	public void setPedido(Pedido pedido) {
+		this.pedido = pedido;
+	}
+
+	
 	
 	
 

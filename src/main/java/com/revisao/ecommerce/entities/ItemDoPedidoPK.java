@@ -1,5 +1,7 @@
 package com.revisao.ecommerce.entities;
 
+import java.util.Objects;
+
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -33,6 +35,25 @@ public class ItemDoPedidoPK {
 
 	public void setProduto(Produto produto) {
 		this.produto = produto;
+	}
+
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(pedido, produto);
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ItemDoPedidoPK other = (ItemDoPedidoPK) obj;
+		return Objects.equals(pedido, other.pedido) && Objects.equals(produto, other.produto);
 	}
 
 

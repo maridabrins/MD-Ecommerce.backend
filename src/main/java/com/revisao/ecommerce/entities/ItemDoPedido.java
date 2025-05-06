@@ -1,5 +1,7 @@
 package com.revisao.ecommerce.entities;
 
+import java.util.Objects;
+
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -8,6 +10,23 @@ import jakarta.persistence.Table;
 @Table(name = "tb_item_do_pedido")
 public class ItemDoPedido {
 	
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ItemDoPedido other = (ItemDoPedido) obj;
+		return Objects.equals(id, other.id);
+	}
+
 	@EmbeddedId
 	private ItemDoPedidoPK id = new ItemDoPedidoPK();
 	
