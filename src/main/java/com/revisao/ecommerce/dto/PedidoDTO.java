@@ -17,18 +17,17 @@ public class PedidoDTO {
 	
 	private List<ItemDoPedidoDTO> itens = new ArrayList<>(); 
 	
-	private Long pagamento_id;
 	
 	public PedidoDTO() {
 		
 	}
 
-	public PedidoDTO(Long id, Instant momento, StatusDoPedido status, Long cliente_id, Long pagamento_id) {
+	public PedidoDTO(Long id, Instant momento, StatusDoPedido status, Long cliente_id) {
 		this.id = id;
 		this.momento = momento;
 		this.status = status;
 		this.cliente_id = cliente_id;
-		this.pagamento_id = pagamento_id;
+		
 	}
 	
 	public PedidoDTO(Pedido entity) {
@@ -36,7 +35,6 @@ public class PedidoDTO {
 	    this.momento = entity.getMomento();
 	    this.status = entity.getStatus();
 	    this.cliente_id = entity.getCliente().getId();
-	    this.pagamento_id = entity.getPagamento().getId();
 	    
 	    for (ItemDoPedido item : entity.getItens()) {
 	    	ItemDoPedidoDTO itemDto = new ItemDoPedidoDTO(item);
@@ -85,14 +83,7 @@ public class PedidoDTO {
 		this.itens = itens;
 	}
 
-	public Long getPagamento_id() {
-		return pagamento_id;
-	}
-
-	public void setPagamento_id(Long pagamento_id) {
-		this.pagamento_id = pagamento_id;
-	}
-
+	
 	
 	
 	
